@@ -66,6 +66,11 @@ const App = () => {
     }
   };
 
+  const playSong = () => {
+    audioRef.current.play();
+    setIsPlaying(true);
+  };
+
   const onEndedChangeSong = () => {
     const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
     const nextIndex = currentIndex + 1;
@@ -147,6 +152,8 @@ const App = () => {
         songs={songs}
         setCurrentSong={setCurrentSong}
         showLibrary={showLibrary}
+        setShowLibrary={setShowLibrary}
+        playSong={playSong}
         onClickCloseLibrary={onClickCloseLibrary} />
       <audio
         onTimeUpdate={updateTime}

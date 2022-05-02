@@ -2,7 +2,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import LibrarySong from './LibrarySong';
 
-const Library = ({ songs, setCurrentSong, showLibrary, onClickCloseLibrary }) => {
+const Library = ({ songs, setCurrentSong, showLibrary, setShowLibrary, playSong, onClickCloseLibrary }) => {
   return (
     <div className={`library ${showLibrary ? 'active-library' : null}`}>
       <div className="library-header">
@@ -15,6 +15,8 @@ const Library = ({ songs, setCurrentSong, showLibrary, onClickCloseLibrary }) =>
             <LibrarySong
               key={song.id}
               song={song}
+              setShowLibrary={setShowLibrary}
+              playSong={playSong}
               setCurrentSong={setCurrentSong} />
           );
         })}

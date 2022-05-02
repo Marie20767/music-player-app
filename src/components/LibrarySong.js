@@ -1,7 +1,14 @@
 
-const LibrarySong = ({ song, setCurrentSong }) => {
+const LibrarySong = ({ song, setShowLibrary, setCurrentSong, playSong }) => {
   const onClickSelectSong = () => {
     setCurrentSong(song);
+
+    // For mobile views, the library takes up the whole screen, so close it after selecting a song
+    if (window.innerWidth <= 768) {
+      setShowLibrary(false);
+    }
+
+    playSong();
   };
 
   return (
