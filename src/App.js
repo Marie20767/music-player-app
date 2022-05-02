@@ -40,12 +40,30 @@ const App = () => {
     const roundedDuration = Math.round(duration);
     const animation = Math.round((roundedCurrentTime / roundedDuration) * 100);
 
-    setSongInfo({
-      ...songInfo,
+    // save current time of the song to local storage
+    const newSongInfo = {
       currentTime: current,
       duration: Number.isNaN(duration) ? 0 : duration,
       animationPercentage: Number.isNaN(animation) ? 0 : animation,
-    });
+    };
+
+    setSongInfo(newSongInfo);
+
+    localStorage.setItem('song-info', JSON.stringify(newSongInfo));
+  };
+
+  const onSongLoaded = (e) => {
+    // check if there is SongInfo stored in local storage
+    const savedSongInfo = JSON.parse(localStorage.getItem('song-info'));
+
+    // If there is then load that into SongInfo and change the audioRef.current.currentTime
+    if (savedSongInfo) {
+      setSongInfo(savedSongInfo);
+      audioRef.current.currentTime = savedSongInfo.currentTime;
+    } else {
+      //  Else just call the updateTime function as normal
+      updateTime(e);
+    }
   };
 
   const onEndedChangeSong = () => {
@@ -64,10 +82,9 @@ const App = () => {
   useEffect(() => {
     const savedSongJSON = localStorage.getItem('current-song');
 
+    // getting the current song from local storage
     if (savedSongJSON) {
       const savedSong = JSON.parse(savedSongJSON);
-
-      console.log('saved song loaded: ', savedSong);
 
       setCurrentSong(savedSong);
     } else {
@@ -99,8 +116,6 @@ const App = () => {
       });
 
       setSongs(newSongs);
-
-      console.log('currentsong cahnged: ', currentSong);
 
       // Save currentSong to local storage
       localStorage.setItem('current-song', JSON.stringify(currentSong));
@@ -135,7 +150,7 @@ const App = () => {
         onClickCloseLibrary={onClickCloseLibrary} />
       <audio
         onTimeUpdate={updateTime}
-        onLoadedMetadata={updateTime}
+        onLoadedMetadata={onSongLoaded}
         ref={audioRef}
         src={currentSong.audio}
         onEnded={onEndedChangeSong}>

@@ -44,8 +44,6 @@ const Player = ({
   const onClickSkipTrack = (direction) => {
     const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
 
-    console.log('>>> currentSong: ', currentSong);
-    console.log('>>> currentIndex: ', currentIndex);
     const nextIndex = direction === 'skip-forward' ? currentIndex + 1 : currentIndex - 1;
 
     if (nextIndex === -1) {
