@@ -1,0 +1,25 @@
+nav {
+  min-height: 10vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  h1 {
+    letter-spacing: 2px;
+    color: brown;
+  }
+  button {
+    background-color: transparent;
+    border: 2px solid rgb(65, 65, 65);
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  &:hover {
+    background-color: rgb(65, 65, 65);
+    color: white;
+  }
+  }
+}
+
+.library-icon {
+  padding-left: 4px;
+}
