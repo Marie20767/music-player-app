@@ -6,15 +6,23 @@
   height: 100%;
   background-color: white;
   box-shadow: 2px 2px 50px rgb(204, 204, 204);
-  overflow: scroll;
   transform: translateX(-100%);
   transition: all 0.5s ease;
-  overflow-y: overlay;
-  overflow-x: hidden;
   opacity: 0;
   h2 {
     padding: 2rem;
   }
+}
+
+// Makes the library songs scrollable but the library header stick to the top
+.library-songs {
+  height: 100%;
+  overflow: scroll;
+  overflow-y: overlay;
+  overflow-x: hidden;
+
+  // Adds spacing to the bottom of the scroll section to make sure the last song isn't cut off
+  padding-bottom: 116px;
 }
 
 .library-song {

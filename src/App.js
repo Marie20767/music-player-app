@@ -17,6 +17,10 @@ import { chillHop } from './utils';
 // > songInfo changes
 // > Player component displays updated currentTime and duration
 
+// TODO:
+// - change favicon logo
+// - if loading is too fast, remove loading spinner
+
 const App = () => {
   // Ref
   const audioRef = useRef(null);
@@ -30,6 +34,9 @@ const App = () => {
     animationPercentage: 0,
   });
   const [showLibrary, setShowLibrary] = useState(false);
+  const [hasSetInitialSongInfo, setHasSetInitialSongInfo] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [songDataHasLoaded, setSongDataHasLoaded] = useState(false);
 
   // Functions
   const updateTime = (e) => {
@@ -53,13 +60,22 @@ const App = () => {
   };
 
   const onSongLoaded = (e) => {
+    console.log('>>> onSongLoaded:e: ', e);
+    setIsLoading(false);
+    setSongDataHasLoaded(true);
     // check if there is SongInfo stored in local storage
     const savedSongInfo = JSON.parse(localStorage.getItem('song-info'));
 
     // If there is then load that into SongInfo and change the audioRef.current.currentTime
-    if (savedSongInfo) {
-      setSongInfo(savedSongInfo);
+    if (savedSongInfo && !hasSetInitialSongInfo) {
       audioRef.current.currentTime = savedSongInfo.currentTime;
+      updateTime({
+        target: {
+          currentTime: savedSongInfo.currentTime,
+          duration: savedSongInfo.duration,
+        },
+      });
+      setHasSetInitialSongInfo(true);
     } else {
       //  Else just call the updateTime function as normal
       updateTime(e);
@@ -94,6 +110,17 @@ const App = () => {
       setCurrentSong(savedSong);
     } else {
       setCurrentSong(songs[0]);
+    }
+
+    const savedSongInfo = JSON.parse(localStorage.getItem('song-info'));
+
+    if (savedSongInfo) {
+      updateTime({
+        target: {
+          currentTime: savedSongInfo.currentTime,
+          duration: savedSongInfo.duration,
+        },
+      });
     }
   }, []);
 
@@ -143,11 +170,15 @@ const App = () => {
         songs={songs}
         setSongs={setSongs}
         isPlaying={isPlaying}
+        isLoading={isLoading}
+        songDataHasLoaded={songDataHasLoaded}
         songInfo={songInfo}
         setIsPlaying={setIsPlaying}
+        setIsLoading={setIsLoading}
         setSongInfo={setSongInfo}
         setCurrentSong={setCurrentSong}
-        audioRef={audioRef} />
+        audioRef={audioRef}
+        updateTime={updateTime} />
       <Library
         songs={songs}
         setCurrentSong={setCurrentSong}
@@ -157,7 +188,7 @@ const App = () => {
         onClickCloseLibrary={onClickCloseLibrary} />
       <audio
         onTimeUpdate={updateTime}
-        onLoadedMetadata={onSongLoaded}
+        onLoadedData={onSongLoaded}
         ref={audioRef}
         src={currentSong.audio}
         onEnded={onEndedChangeSong}>

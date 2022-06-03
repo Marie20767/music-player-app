@@ -36,6 +36,7 @@ input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   height: 16px;
   width: 16px;
+  opacity: 0;
 }
 
 input[type="range"]::-moz-range-thumb {
@@ -78,5 +79,12 @@ input[type="range"]::-moz-range-thumb {
   }
   .play-control {
     width: 20rem;
+  }
+}
+
+// For landscape oriented tablets
+@media screen and (min-width: 768px) and (max-height: 700px) {
+  .player {
+    margin-bottom: 4%;
   }
 }

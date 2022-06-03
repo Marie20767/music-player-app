@@ -3,16 +3,21 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faAngleLeft, faAngleRight, faPause } from '@fortawesome/free-solid-svg-icons';
+import LoadingSpinner from './LoadingSpinner';
 
 const Player = ({
   songs,
   currentSong,
   setCurrentSong,
   isPlaying,
+  isLoading,
+  songDataHasLoaded,
   songInfo,
   setIsPlaying,
+  setIsLoading,
   setSongInfo,
   audioRef,
+  updateTime,
 }) => {
   // Functions
   const onClickPlaySong = () => {
@@ -20,6 +25,10 @@ const Player = ({
       audioRef.current.pause();
     } else {
       audioRef.current.play();
+
+      if (!songDataHasLoaded) {
+        setIsLoading(true);
+      }
     }
 
     setIsPlaying(!isPlaying);
@@ -51,6 +60,14 @@ const Player = ({
     } else {
       setCurrentSong(songs[nextIndex % songs.length]);
     }
+
+    // Fixes an issue with safari in which the song current time is not reset immediately when changing songs
+    updateTime({
+      target: {
+        currentTime: 0,
+        duration: songInfo.duration,
+      },
+    });
   };
 
   const formattedTime = (seconds = 0) => {
@@ -91,11 +108,17 @@ const Player = ({
           size="2x"
           icon={faAngleLeft}
           onClick={() => onClickSkipTrack('skip-back')} />
-        <FontAwesomeIcon
-          onClick={onClickPlaySong}
-          className="play"
-          size="2x"
-          icon={isPlaying ? faPause : faPlay} />
+
+        {isLoading
+          ? <LoadingSpinner />
+          : (
+            <FontAwesomeIcon
+              onClick={onClickPlaySong}
+              className="play"
+              size="2x"
+              icon={isPlaying ? faPause : faPlay} />
+          )}
+
         <FontAwesomeIcon
           className="skip-forward"
           size="2x"
