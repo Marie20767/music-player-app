@@ -19,7 +19,6 @@ import { chillHop } from './utils';
 
 // TODO:
 // - change favicon logo
-// - if loading is too fast, remove loading spinner
 
 const App = () => {
   // Ref
@@ -35,8 +34,6 @@ const App = () => {
   });
   const [showLibrary, setShowLibrary] = useState(false);
   const [hasSetInitialSongInfo, setHasSetInitialSongInfo] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [songDataHasLoaded, setSongDataHasLoaded] = useState(false);
 
   // Functions
   const updateTime = (e) => {
@@ -60,9 +57,6 @@ const App = () => {
   };
 
   const onSongLoaded = (e) => {
-    console.log('>>> onSongLoaded:e: ', e);
-    setIsLoading(false);
-    setSongDataHasLoaded(true);
     // check if there is SongInfo stored in local storage
     const savedSongInfo = JSON.parse(localStorage.getItem('song-info'));
 
@@ -170,11 +164,8 @@ const App = () => {
         songs={songs}
         setSongs={setSongs}
         isPlaying={isPlaying}
-        isLoading={isLoading}
-        songDataHasLoaded={songDataHasLoaded}
         songInfo={songInfo}
         setIsPlaying={setIsPlaying}
-        setIsLoading={setIsLoading}
         setSongInfo={setSongInfo}
         setCurrentSong={setCurrentSong}
         audioRef={audioRef}

@@ -3,18 +3,14 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faAngleLeft, faAngleRight, faPause } from '@fortawesome/free-solid-svg-icons';
-import LoadingSpinner from './LoadingSpinner';
 
 const Player = ({
   songs,
   currentSong,
   setCurrentSong,
   isPlaying,
-  isLoading,
-  songDataHasLoaded,
   songInfo,
   setIsPlaying,
-  setIsLoading,
   setSongInfo,
   audioRef,
   updateTime,
@@ -25,10 +21,6 @@ const Player = ({
       audioRef.current.pause();
     } else {
       audioRef.current.play();
-
-      if (!songDataHasLoaded) {
-        setIsLoading(true);
-      }
     }
 
     setIsPlaying(!isPlaying);
@@ -109,15 +101,11 @@ const Player = ({
           icon={faAngleLeft}
           onClick={() => onClickSkipTrack('skip-back')} />
 
-        {isLoading
-          ? <LoadingSpinner />
-          : (
-            <FontAwesomeIcon
-              onClick={onClickPlaySong}
-              className="play"
-              size="2x"
-              icon={isPlaying ? faPause : faPlay} />
-          )}
+        <FontAwesomeIcon
+          onClick={onClickPlaySong}
+          className="play"
+          size="2x"
+          icon={isPlaying ? faPause : faPlay} />
 
         <FontAwesomeIcon
           className="skip-forward"
