@@ -18,7 +18,7 @@ import { chillHop } from './utils';
 // > Player component displays updated currentTime and duration
 
 // TODO:
-// - change favicon logo
+// -fix favicon Iphone logo issue
 
 const App = () => {
   // Ref
