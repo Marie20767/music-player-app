@@ -17,9 +17,6 @@ import { chillHop } from './utils';
 // > songInfo changes
 // > Player component displays updated currentTime and duration
 
-// TODO:
-// -fix favicon Iphone logo issue
-
 const App = () => {
   // Ref
   const audioRef = useRef(null);
