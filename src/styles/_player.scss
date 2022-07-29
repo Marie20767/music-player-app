@@ -10,12 +10,14 @@
   width: 90%;
   display: flex;
   align-items: center;
+  
   input {
     width: 100%;
     -webkit-appearance: none;
     background: transparent;
     cursor: pointer;
   }
+
   p {
     padding: 1rem;
   }
@@ -27,6 +29,7 @@
   align-items: center;
   padding: 1rem;
   width: 65%;
+  
   svg {
     cursor: pointer;
   }
