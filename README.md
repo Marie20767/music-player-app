@@ -1,6 +1,6 @@
 # Music Player with curated playlist
 
-View my music player here: https://marie-portfolio.pages.dev/
+View my music player here: https://marie-music-player.pages.dev/
 
 ## Available Scripts
 
