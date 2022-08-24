@@ -1,5 +1,7 @@
 # Music Player with curated playlists
 
+View my music player here: https://marie-portfolio.pages.dev/
+
 ## Available Scripts
 
 In the project directory, you can run:
