@@ -1,4 +1,4 @@
-# Music Player with curated playlists
+# Music Player with curated playlist
 
 View my music player here: https://marie-portfolio.pages.dev/
 
