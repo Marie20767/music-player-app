@@ -1,4 +1,4 @@
-# Music Player with curated playlist
+# React Music Player with curated playlist
 
 View my music player here: https://marie-music-player.pages.dev/
 
