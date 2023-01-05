@@ -4,7 +4,7 @@ import { faMusic } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import SunIcon from '../icons/sun-icon.png';
 import MoonIcon from '../icons/moon-icon.png';
-import { changeColors } from '../features/theme';
+import { changeTheme } from '../features/theme';
 
 const Nav = ({ showLibrary, setShowLibrary }) => {
   const theme = useSelector((state) => state.theme.value);
@@ -12,11 +12,13 @@ const Nav = ({ showLibrary, setShowLibrary }) => {
 
   const onClickChangeThemeColors = () => {
     if (theme === 'dark') {
-      dispatch(changeColors('light'));
+      dispatch(changeTheme('light'));
       document.body.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
     } else {
-      dispatch(changeColors('dark'));
+      dispatch(changeTheme('dark'));
       document.body.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
     }
   };
 
