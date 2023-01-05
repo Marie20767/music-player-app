@@ -17,11 +17,13 @@ const Nav = () => {
       dispatch(changeTheme('light'));
       document.body.classList.remove('dark');
       document.documentElement.className = '';
+      document.getElementById('root').classList.remove('dark');
       localStorage.setItem('theme', 'light');
     } else {
       dispatch(changeTheme('dark'));
       document.body.classList.add('dark');
       document.documentElement.className = 'dark';
+      document.getElementById('root').classList.add('dark');
       localStorage.setItem('theme', 'dark');
     }
   };
