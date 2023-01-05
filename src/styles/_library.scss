@@ -1,3 +1,38 @@
+.dark {
+  .library {
+    background-color: rgb(28, 28, 39);
+    box-shadow: 2px 2px 50px rgba(0, 0, 0, 1);
+  }
+
+  .library-song {
+    &:hover {
+      background-color: rgba(219, 102, 116, 0.288);
+    }
+  }
+
+  .selected {
+    background-color: rgb(200, 68, 83);
+    &:hover {
+      background-color: rgb(200, 68, 83);
+    }
+  }
+
+  .close-library {
+    color: white;
+  }
+
+  *{
+    scrollbar-color: rgba(155, 155, 155, 0.628) transparent;
+  }
+
+  
+  *::-webkit-scrollbar-thumb {
+    background-color: rgba(155, 155, 155, 0.628) transparent;
+
+  }
+
+}
+
 .library {
   position: fixed;
   left: 0;

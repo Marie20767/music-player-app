@@ -2,6 +2,7 @@
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable jsx-a11y/media-has-caption */
 import React, { useState, useRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Library from './components/Library';
 import Nav from './components/Nav';
 import Player from './components/Player';
@@ -31,6 +32,8 @@ const App = () => {
   });
   const [showLibrary, setShowLibrary] = useState(false);
   const [hasSetInitialSongInfo, setHasSetInitialSongInfo] = useState(false);
+
+  const theme = useSelector((state) => state.theme.value);
 
   // Functions
   const updateTime = (e) => {
@@ -150,7 +153,7 @@ const App = () => {
   }
 
   return (
-    <div className={`App ${showLibrary ? 'library-active' : null}`}>
+    <div className={`App ${showLibrary ? 'library-active' : null} ${theme}`}>
       <Nav
         showLibrary={showLibrary}
         setShowLibrary={setShowLibrary} />

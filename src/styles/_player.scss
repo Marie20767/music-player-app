@@ -1,3 +1,9 @@
+.dark {
+  .skip-back, .skip-forward, .play, p {
+    color: white;
+  }
+}
+
 .player {
   display: flex;
   flex-direction: column;
