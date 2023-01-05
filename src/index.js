@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom/client';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import App from './App';
-import themeReducer from './features/theme';
+import themeReducer from './reducers/theme';
+import songsReducer from './reducers/songs';
 
 const store = configureStore({
   reducer: {
     theme: themeReducer,
+    songs: songsReducer,
   },
 });
 

@@ -3,27 +3,25 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faAngleLeft, faAngleRight, faPause } from '@fortawesome/free-solid-svg-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { onDragTimeControlSongTimeUpdated, onSongSkipped, setSongPlaying } from '../reducers/songs';
 
 const Player = ({
-  songs,
-  currentSong,
-  setCurrentSong,
-  isPlaying,
-  songInfo,
-  setIsPlaying,
-  setSongInfo,
   audioRef,
   updateTime,
 }) => {
+  const { currentSong, isSongPlaying, currentSongInfo } = useSelector((state) => state.songs);
+  const dispatch = useDispatch();
+
   // Functions
   const onClickPlaySong = () => {
-    if (isPlaying) {
+    if (isSongPlaying) {
       audioRef.current.pause();
     } else {
       audioRef.current.play();
     }
 
-    setIsPlaying(!isPlaying);
+    dispatch(setSongPlaying(!isSongPlaying));
   };
 
   const addZerosToTime = (time) => {
@@ -36,28 +34,17 @@ const Player = ({
 
   const onChangeDragTimeControl = (e) => {
     audioRef.current.currentTime = e.target.value;
-    setSongInfo({
-      ...songInfo,
-      currentTime: e.target.value,
-    });
+    dispatch(onDragTimeControlSongTimeUpdated(e));
   };
 
   const onClickSkipTrack = (direction) => {
-    const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
-
-    const nextIndex = direction === 'skip-forward' ? currentIndex + 1 : currentIndex - 1;
-
-    if (nextIndex === -1) {
-      setCurrentSong(songs[songs.length - 1]);
-    } else {
-      setCurrentSong(songs[nextIndex % songs.length]);
-    }
+    dispatch(onSongSkipped(direction));
 
     // Fixes an issue with safari in which the song current time is not reset immediately when changing songs
     updateTime({
       target: {
         currentTime: 0,
-        duration: songInfo.duration,
+        duration: currentSongInfo.duration,
       },
     });
   };
@@ -75,24 +62,24 @@ const Player = ({
 
   // Add time slider styles
   const trackAnimation = {
-    transform: `translateX(${songInfo.animationPercentage}%)`,
+    transform: `translateX(${currentSongInfo.animationPercentage}%)`,
   };
 
   return (
     <div className="player">
       <div className="time-control">
-        <p>{formattedTime(songInfo.currentTime)}</p>
+        <p>{formattedTime(currentSongInfo.currentTime)}</p>
         <div style={{ background: `linear-gradient(to right,${currentSong.color[0]},${currentSong.color[1]})` }} className="track">
           <input
             min={0}
-            max={songInfo.duration}
-            value={songInfo.currentTime}
+            max={currentSongInfo.duration}
+            value={currentSongInfo.currentTime}
             type="range"
             onChange={onChangeDragTimeControl} />
           <div style={trackAnimation} className="animate-track"></div>
         </div>
 
-        <p>{formattedTime(songInfo.duration)}</p>
+        <p>{formattedTime(currentSongInfo.duration)}</p>
       </div>
       <div className="play-control">
         <FontAwesomeIcon
@@ -105,7 +92,7 @@ const Player = ({
           onClick={onClickPlaySong}
           className="play"
           size="2x"
-          icon={isPlaying ? faPause : faPlay} />
+          icon={isSongPlaying ? faPause : faPlay} />
 
         <FontAwesomeIcon
           className="skip-forward"

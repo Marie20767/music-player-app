@@ -1,13 +1,11 @@
+import { useDispatch } from 'react-redux';
+import { onSelectSong } from '../reducers/songs';
 
-const LibrarySong = ({ song, setShowLibrary, setCurrentSong, playSong }) => {
+const LibrarySong = ({ song, playSong }) => {
+  const dispatch = useDispatch();
+
   const onClickSelectSong = () => {
-    setCurrentSong(song);
-
-    // For mobile views, the library takes up the whole screen, so close it after selecting a song
-    if (window.innerWidth <= 768) {
-      setShowLibrary(false);
-    }
-
+    dispatch(onSelectSong(song));
     playSong();
   };
 

@@ -4,20 +4,24 @@ import { faMusic } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import SunIcon from '../icons/sun-icon.png';
 import MoonIcon from '../icons/moon-icon.png';
-import { changeTheme } from '../features/theme';
+import { changeTheme } from '../reducers/theme';
+import { setShowLibrary } from '../reducers/songs';
 
-const Nav = ({ showLibrary, setShowLibrary }) => {
+const Nav = () => {
   const theme = useSelector((state) => state.theme.value);
+  const { isLibraryShowing } = useSelector((state) => state.songs);
   const dispatch = useDispatch();
 
   const onClickChangeThemeColors = () => {
     if (theme === 'dark') {
       dispatch(changeTheme('light'));
       document.body.classList.remove('dark');
+      document.documentElement.className = '';
       localStorage.setItem('theme', 'light');
     } else {
       dispatch(changeTheme('dark'));
       document.body.classList.add('dark');
+      document.documentElement.className = 'dark';
       localStorage.setItem('theme', 'dark');
     }
   };
@@ -26,7 +30,7 @@ const Nav = ({ showLibrary, setShowLibrary }) => {
     <nav>
       <h1>Mixtape</h1>
       <div className="buttons-container">
-        <button type="button" onClick={() => setShowLibrary(!showLibrary)}>
+        <button type="button" onClick={() => dispatch(setShowLibrary(!isLibraryShowing))}>
           Library
           <FontAwesomeIcon icon={faMusic} className="library-icon" />
         </button>

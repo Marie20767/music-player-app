@@ -1,23 +1,24 @@
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useSelector } from 'react-redux';
 import LibrarySong from './LibrarySong';
 
-const Library = ({ songs, setCurrentSong, showLibrary, setShowLibrary, playSong, onClickCloseLibrary }) => {
+const Library = ({ playSong, onClickCloseLibrary }) => {
+  const { isLibraryShowing, allSongs } = useSelector((state) => state.songs);
+
   return (
-    <div className={`library ${showLibrary ? 'active-library' : null}`}>
+    <div className={`library ${isLibraryShowing ? 'active-library' : null}`}>
       <div className="library-header">
         <h2>Library</h2>
         <FontAwesomeIcon icon={faXmark} onClick={onClickCloseLibrary} size="lg" className="close-library" />
       </div>
       <div className="library-songs">
-        {songs.map((song) => {
+        {allSongs.map((song) => {
           return (
             <LibrarySong
               key={song.id}
               song={song}
-              setShowLibrary={setShowLibrary}
-              playSong={playSong}
-              setCurrentSong={setCurrentSong} />
+              playSong={playSong} />
           );
         })}
       </div>

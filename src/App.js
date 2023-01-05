@@ -2,13 +2,13 @@
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable jsx-a11y/media-has-caption */
 import React, { useState, useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Library from './components/Library';
 import Nav from './components/Nav';
 import Player from './components/Player';
 import Song from './components/Song';
+import { changeCurrentSong, onSongChange, onSongEnded, onSongTimeUpdated, setShowLibrary, setSongPlaying } from './reducers/songs';
 import './styles/app.scss';
-import { chillHop } from './utils';
 
 // currentSong gets changed
 // > audio element now points to new song (currentSong.audio)
@@ -22,42 +22,20 @@ const App = () => {
   // Ref
   const audioRef = useRef(null);
   // States
-  const [songs, setSongs] = useState(chillHop());
-  const [currentSong, setCurrentSong] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [songInfo, setSongInfo] = useState({
-    currentTime: 0,
-    duration: 0,
-    animationPercentage: 0,
-  });
-  const [showLibrary, setShowLibrary] = useState(false);
   const [hasSetInitialSongInfo, setHasSetInitialSongInfo] = useState(false);
 
+  const dispatch = useDispatch();
+
   const theme = useSelector((state) => state.theme.value);
+  const { currentSong, allSongs, isSongPlaying, isLibraryShowing } = useSelector((state) => state.songs);
 
   // Functions
   const updateTime = (e) => {
-    const current = e.target.currentTime;
-    const duration = e.target.duration;
-    // Calculate percentage to customise slider
-    const roundedCurrentTime = Math.round(current);
-    const roundedDuration = Math.round(duration);
-    const animation = Math.round((roundedCurrentTime / roundedDuration) * 100);
-
-    // save current time of the song to local storage
-    const newSongInfo = {
-      currentTime: current,
-      duration: Number.isNaN(duration) ? 0 : duration,
-      animationPercentage: Number.isNaN(animation) ? 0 : animation,
-    };
-
-    setSongInfo(newSongInfo);
-
-    localStorage.setItem('song-info', JSON.stringify(newSongInfo));
+    dispatch(onSongTimeUpdated(e));
   };
 
   const onSongLoaded = (e) => {
-    // check if there is SongInfo stored in local storage
+    // Check if there is SongInfo stored in local storage
     const savedSongInfo = JSON.parse(localStorage.getItem('song-info'));
 
     // If there is then load that into SongInfo and change the audioRef.current.currentTime
@@ -69,6 +47,7 @@ const App = () => {
           duration: savedSongInfo.duration,
         },
       });
+
       setHasSetInitialSongInfo(true);
     } else {
       //  Else just call the updateTime function as normal
@@ -78,18 +57,7 @@ const App = () => {
 
   const playSong = () => {
     audioRef.current.play();
-    setIsPlaying(true);
-  };
-
-  const onEndedChangeSong = () => {
-    const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
-    const nextIndex = currentIndex + 1;
-
-    setCurrentSong(songs[nextIndex % songs.length]);
-  };
-
-  const onClickCloseLibrary = () => {
-    setShowLibrary(false);
+    dispatch(setSongPlaying(true));
   };
 
   // UseEffect
@@ -101,9 +69,9 @@ const App = () => {
     if (savedSongJSON) {
       const savedSong = JSON.parse(savedSongJSON);
 
-      setCurrentSong(savedSong);
+      dispatch(changeCurrentSong(savedSong));
     } else {
-      setCurrentSong(songs[0]);
+      dispatch(changeCurrentSong(allSongs[0]));
     }
 
     const savedSongInfo = JSON.parse(localStorage.getItem('song-info'));
@@ -123,25 +91,11 @@ const App = () => {
   // - updates the active state of the song in songs
   useEffect(() => {
     if (currentSong) {
-      if (isPlaying) {
+      if (isSongPlaying) {
         audioRef.current.play();
       }
 
-      const newSongs = songs.map((track) => {
-        if (track.id === currentSong.id) {
-          return {
-            ...currentSong,
-            active: true,
-          };
-        }
-
-        return {
-          ...track,
-          active: false,
-        };
-      });
-
-      setSongs(newSongs);
+      dispatch(onSongChange());
 
       // Save currentSong to local storage
       localStorage.setItem('current-song', JSON.stringify(currentSong));
@@ -153,36 +107,22 @@ const App = () => {
   }
 
   return (
-    <div className={`App ${showLibrary ? 'library-active' : null} ${theme}`}>
-      <Nav
-        showLibrary={showLibrary}
-        setShowLibrary={setShowLibrary} />
+    <div className={`App ${isLibraryShowing ? 'library-active' : null} ${theme}`}>
+      <Nav />
       <Song
         currentSong={currentSong} />
       <Player
-        currentSong={currentSong}
-        songs={songs}
-        setSongs={setSongs}
-        isPlaying={isPlaying}
-        songInfo={songInfo}
-        setIsPlaying={setIsPlaying}
-        setSongInfo={setSongInfo}
-        setCurrentSong={setCurrentSong}
         audioRef={audioRef}
         updateTime={updateTime} />
       <Library
-        songs={songs}
-        setCurrentSong={setCurrentSong}
-        showLibrary={showLibrary}
-        setShowLibrary={setShowLibrary}
         playSong={playSong}
-        onClickCloseLibrary={onClickCloseLibrary} />
+        onClickCloseLibrary={() => dispatch(setShowLibrary(false))} />
       <audio
         onTimeUpdate={updateTime}
         onLoadedData={onSongLoaded}
         ref={audioRef}
         src={currentSong.audio}
-        onEnded={onEndedChangeSong}>
+        onEnded={() => dispatch(onSongEnded())}>
       </audio>
     </div>
   );
