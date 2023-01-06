@@ -13,7 +13,6 @@ const Player = ({
   const { currentSong, isSongPlaying, currentSongInfo } = useSelector((state) => state.songs);
   const dispatch = useDispatch();
 
-  // Functions
   const onClickPlaySong = () => {
     if (isSongPlaying) {
       audioRef.current.pause();

@@ -1,13 +1,19 @@
-/* eslint-disable prefer-destructuring */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable jsx-a11y/media-has-caption */
 import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import Library from './components/Library';
 import Nav from './components/Nav';
 import Player from './components/Player';
 import Song from './components/Song';
-import { changeCurrentSong, onSongChange, onSongEnded, onSongTimeUpdated, setShowLibrary, setSongPlaying } from './reducers/songs';
+import {
+  changeCurrentSong,
+  onSongChange,
+  onSongEnded,
+  onSongTimeUpdated,
+  setSongPlaying,
+} from './reducers/songs';
 import './styles/app.scss';
 
 // currentSong gets changed
@@ -19,9 +25,7 @@ import './styles/app.scss';
 // > Player component displays updated currentTime and duration
 
 const App = () => {
-  // Ref
   const audioRef = useRef(null);
-  // States
   const [hasSetInitialSongInfo, setHasSetInitialSongInfo] = useState(false);
 
   const dispatch = useDispatch();
@@ -29,7 +33,6 @@ const App = () => {
   const theme = useSelector((state) => state.theme.value);
   const { currentSong, allSongs, isSongPlaying, isLibraryShowing } = useSelector((state) => state.songs);
 
-  // Functions
   const updateTime = (e) => {
     dispatch(onSongTimeUpdated(e));
   };
@@ -60,12 +63,10 @@ const App = () => {
     dispatch(setSongPlaying(true));
   };
 
-  // UseEffect
   // Handles setting the song from local storage:
   useEffect(() => {
     const savedSongJSON = localStorage.getItem('current-song');
 
-    // getting the current song from local storage
     if (savedSongJSON) {
       const savedSong = JSON.parse(savedSongJSON);
 
@@ -97,7 +98,6 @@ const App = () => {
 
       dispatch(onSongChange());
 
-      // Save currentSong to local storage
       localStorage.setItem('current-song', JSON.stringify(currentSong));
     }
   }, [currentSong]);
@@ -109,14 +109,12 @@ const App = () => {
   return (
     <div className={`App ${isLibraryShowing ? 'library-active' : null} ${theme}`}>
       <Nav />
-      <Song
-        currentSong={currentSong} />
+      <Song currentSong={currentSong} />
       <Player
         audioRef={audioRef}
         updateTime={updateTime} />
       <Library
-        playSong={playSong}
-        onClickCloseLibrary={() => dispatch(setShowLibrary(false))} />
+        playSong={playSong} />
       <audio
         onTimeUpdate={updateTime}
         onLoadedData={onSongLoaded}
