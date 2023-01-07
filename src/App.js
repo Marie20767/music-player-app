@@ -1,5 +1,3 @@
-/* eslint-disable react/self-closing-comp */
-/* eslint-disable jsx-a11y/media-has-caption */
 import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -34,7 +32,10 @@ const App = () => {
   const { currentSong, allSongs, isSongPlaying, isLibraryShowing } = useSelector((state) => state.songs);
 
   const updateTime = (e) => {
-    dispatch(onSongTimeUpdated(e));
+    dispatch(onSongTimeUpdated({
+      currentTime: e.target.currentTime,
+      duration: e.target.duration,
+    }));
   };
 
   const onSongLoaded = (e) => {
@@ -120,8 +121,7 @@ const App = () => {
         onLoadedData={onSongLoaded}
         ref={audioRef}
         src={currentSong.audio}
-        onEnded={() => dispatch(onSongEnded())}>
-      </audio>
+        onEnded={() => dispatch(onSongEnded())} />
     </div>
   );
 };

@@ -62,6 +62,7 @@ rules:
   jsx-a11y/alt-text: 0
   jsx-a11y/click-events-have-key-events: 0
   jsx-a11y/no-static-element-interactions: 0
+  jsx-a11y/media-has-caption: 0
   react/jsx-one-expression-per-line: 0
   react/function-component-definition: 0
   react/react-in-jsx-scope: 0

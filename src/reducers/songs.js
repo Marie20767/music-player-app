@@ -74,15 +74,14 @@ const songsSlice = createSlice({
     },
 
     onSongTimeUpdated: (state, action) => {
-      const current = action.payload.target.currentTime;
-      const { duration } = action.payload.target;
+      const { currentTime, duration } = action.payload;
       // Calculate percentage to customise slider
-      const roundedCurrentTime = Math.round(current);
+      const roundedCurrentTime = Math.round(currentTime);
       const roundedDuration = Math.round(duration);
       const animation = Math.round((roundedCurrentTime / roundedDuration) * 100);
 
       const newSongInfo = {
-        currentTime: current,
+        currentTime,
         duration: Number.isNaN(duration) ? 0 : duration,
         animationPercentage: Number.isNaN(animation) ? 0 : animation,
       };
