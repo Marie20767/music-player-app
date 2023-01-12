@@ -1,6 +1,7 @@
+import { useDispatch, useSelector } from 'react-redux';
+
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { setShowLibrary } from '../reducers/songs';
 import LibrarySong from './LibrarySong';

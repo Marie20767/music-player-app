@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { chillHop } from '../utils';
+import { chillHop, updateActiveSong } from '../utils';
 
 const songsSlice = createSlice({
   name: 'songs',
@@ -15,8 +15,10 @@ const songsSlice = createSlice({
     },
   },
   reducers: {
-    changeCurrentSong: (state, action) => {
+    setCurrentSong: (state, action) => {
       state.currentSong = action.payload;
+
+      state.allSongs = updateActiveSong(state.allSongs, state.currentSong);
     },
 
     onSongEnded: (state) => {
@@ -24,24 +26,16 @@ const songsSlice = createSlice({
       const nextIndex = currentIndex + 1;
 
       state.currentSong = state.allSongs[nextIndex % state.allSongs.length];
+
+      state.allSongs = updateActiveSong(state.allSongs, state.currentSong);
     },
 
-    onSongChange: (state) => {
-      const newSongs = state.allSongs.map((track) => {
-        if (track.id === state.currentSong.id) {
-          return {
-            ...state.currentSong,
-            active: true,
-          };
-        }
+    onSongShuffled: (state) => {
+      const randomIndex = Math.floor(Math.random() * state.allSongs.length);
 
-        return {
-          ...track,
-          active: false,
-        };
-      });
+      state.currentSong = state.allSongs[randomIndex];
 
-      state.allSongs = newSongs;
+      state.allSongs = updateActiveSong(state.allSongs, state.currentSong);
     },
 
     onSongSkipped: (state, action) => {
@@ -54,6 +48,8 @@ const songsSlice = createSlice({
       } else {
         state.currentSong = state.allSongs[nextIndex % state.allSongs.length];
       }
+
+      state.allSongs = updateActiveSong(state.allSongs, state.currentSong);
     },
 
     setSongPlaying: (state, action) => {
@@ -65,7 +61,9 @@ const songsSlice = createSlice({
     },
 
     onSelectSong: (state, action) => {
-      state.currentSong(action.payload);
+      state.currentSong = action.payload;
+
+      state.allSongs = updateActiveSong(state.allSongs, state.currentSong);
 
       // For mobile views, the library takes up the whole screen, so close it after selecting a song
       if (window.innerWidth <= 768) {
@@ -94,16 +92,16 @@ const songsSlice = createSlice({
     onDragTimeControlSongTimeUpdated: (state, action) => {
       state.currentSongInfo = {
         ...state.currentSongInfo,
-        currentTime: action.payload.target.value,
+        currentTime: action.payload,
       };
     },
   },
 });
 
 export const {
-  changeCurrentSong,
+  setCurrentSong,
   onSongEnded,
-  onSongChange,
+  onSongShuffled,
   onSongSkipped,
   setSongPlaying,
   setShowLibrary,

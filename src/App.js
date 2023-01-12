@@ -5,13 +5,14 @@ import Library from './components/Library';
 import Nav from './components/Nav';
 import Player from './components/Player';
 import Song from './components/Song';
+
 import {
-  changeCurrentSong,
-  onSongChange,
+  setCurrentSong,
   onSongEnded,
   onSongTimeUpdated,
   setSongPlaying,
 } from './reducers/songs';
+
 import './styles/app.scss';
 
 // currentSong gets changed
@@ -71,9 +72,9 @@ const App = () => {
     if (savedSongJSON) {
       const savedSong = JSON.parse(savedSongJSON);
 
-      dispatch(changeCurrentSong(savedSong));
+      dispatch(setCurrentSong(savedSong));
     } else {
-      dispatch(changeCurrentSong(allSongs[0]));
+      dispatch(setCurrentSong(allSongs[0]));
     }
 
     const savedSongInfo = JSON.parse(localStorage.getItem('song-info'));
@@ -96,8 +97,6 @@ const App = () => {
       if (isSongPlaying) {
         audioRef.current.play();
       }
-
-      dispatch(onSongChange());
 
       localStorage.setItem('current-song', JSON.stringify(currentSong));
     }

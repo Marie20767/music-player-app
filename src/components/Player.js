@@ -1,11 +1,9 @@
-/* eslint-disable prefer-destructuring */
-/* eslint-disable react/self-closing-comp */
-/* eslint-disable jsx-a11y/media-has-caption */
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faAngleLeft, faAngleRight, faPause } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { onDragTimeControlSongTimeUpdated, onSongSkipped, setSongPlaying } from '../reducers/songs';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faAngleLeft, faAngleRight, faPause, faShuffle } from '@fortawesome/free-solid-svg-icons';
+
+import { onDragTimeControlSongTimeUpdated, onSongShuffled, onSongSkipped, setSongPlaying } from '../reducers/songs';
 
 const Player = ({
   audioRef,
@@ -34,7 +32,7 @@ const Player = ({
 
   const onChangeDragTimeControl = (e) => {
     audioRef.current.currentTime = e.target.value;
-    dispatch(onDragTimeControlSongTimeUpdated(e));
+    dispatch(onDragTimeControlSongTimeUpdated(e.target.value));
   };
 
   const onClickSkipTrack = (direction) => {
@@ -76,29 +74,38 @@ const Player = ({
             value={currentSongInfo.currentTime}
             type="range"
             onChange={onChangeDragTimeControl} />
-          <div style={trackAnimation} className="animate-track"></div>
+          <div style={trackAnimation} className="animate-track" />
         </div>
 
         <p>{formattedTime(currentSongInfo.duration)}</p>
       </div>
-      <div className="play-control">
-        <FontAwesomeIcon
-          className="skip-back"
-          size="2x"
-          icon={faAngleLeft}
-          onClick={() => onClickSkipTrack('skip-back')} />
+      <div className="play-and-shuffle-controls">
+        <div className="play-control">
+          <FontAwesomeIcon
+            className="skip-back"
+            size="2x"
+            icon={faAngleLeft}
+            onClick={() => onClickSkipTrack('skip-back')} />
 
-        <FontAwesomeIcon
-          onClick={onClickPlaySong}
-          className="play"
-          size="2x"
-          icon={isSongPlaying ? faPause : faPlay} />
+          <FontAwesomeIcon
+            onClick={onClickPlaySong}
+            className="play"
+            size="2x"
+            icon={isSongPlaying ? faPause : faPlay} />
 
-        <FontAwesomeIcon
-          className="skip-forward"
-          size="2x"
-          icon={faAngleRight}
-          onClick={() => onClickSkipTrack('skip-forward')} />
+          <FontAwesomeIcon
+            className="skip-forward"
+            size="2x"
+            icon={faAngleRight}
+            onClick={() => onClickSkipTrack('skip-forward')} />
+        </div>
+
+        <div className="shuffle">
+          <FontAwesomeIcon
+            fontSize="25px"
+            icon={faShuffle}
+            onClick={() => dispatch(onSongShuffled())} />
+        </div>
       </div>
     </div>
   );

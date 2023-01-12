@@ -1,11 +1,12 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import { useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMusic } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMusic } from '@fortawesome/free-solid-svg-icons';
 import SunIcon from '../icons/sun-icon.png';
 import MoonIcon from '../icons/moon-icon.png';
+
 import { changeTheme } from '../reducers/theme';
 import { setShowLibrary } from '../reducers/songs';
 
