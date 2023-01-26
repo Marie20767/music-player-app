@@ -18,7 +18,7 @@
 }
 
 nav {
-  min-height: 10vh;
+  min-height: 64px;
   display: flex;
   justify-content: space-between;
   margin: 12px 24px 0 24px;
@@ -72,8 +72,15 @@ nav {
   padding-left: 4px;
 }
 
+@media screen and (min-height: 640px) and (max-width: 768px) {
+  nav {
+    min-height: 76px;
+  }
+}
+
 @media screen and (min-width: 768px) {
   nav {
+    min-height: 10vh;
     justify-content: space-around;
     margin: 0;
   }
